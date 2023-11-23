@@ -118,8 +118,8 @@ public class UserUtils {
                 jGenerator.writeRawValue("\"" + (String) person.get("firstName") + "\"");
                 jGenerator.writeFieldName("lastName");
                 jGenerator.writeRawValue("\"" + (String) person.get("lastName") + "\"");
-//                jGenerator.writeFieldName("email");
-//               jGenerator.writeRawValue("\"" + (String) person.get("email") + "\"");
+                jGenerator.writeFieldName("email");
+                jGenerator.writeRawValue("\"" + (String) person.get("email") + "\"");
                 jGenerator.writeFieldName("role");
                 jGenerator.writeRawValue("\"" + (String) person.get("role") + "\"");
                 jGenerator.writeEndObject();
