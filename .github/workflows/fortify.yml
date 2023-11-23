@@ -27,6 +27,7 @@ jobs:
       actions: read
       contents: read
       security-events: write
+       
 
     steps:
       # Check out source code
@@ -40,16 +41,25 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
-      # Perform Fortify on Demand SAST + SCA scan and import SAST results into GitHub code scanning alerts
-      - name: Run FoD SAST Scan
-        uses: fortify/github-action@v1
-        with:
-          sast-scan: true
+      # Run SAST Scan
+      - name: Fortify SAST Scan
+        uses: agendry-pub/gha-ssc-ast-scan@v1.0.1
         env:
-          FOD_URL: ${{secrets.FOD_URL}}
-          FOD_TENANT: ${{secrets.FOD_TENANT}}
-          FOD_USER: ${{secrets.FOD_USER}}
-          FOD_PASSWORD: ${{secrets.FOD_PAT}}
-          FOD_RELEASE: ${{ secrets.FOD_RELEASE_ID }}
-          EXTRA_PACKAGE_OPTS: -oss
-          DO_EXPORT: true
+          FCLI_DEFAULT_TOKEN_EXPIRE: "1h"
+          FCLI_EXECUTABLE_LOCATION: .
+        with:
+          ssc_base_url: ${{ secrets.FTFY_SSC_BASE_URL}}
+          ssc_app: "${{ github.event.repository.name }}"
+          ssc_version: "${{ github.ref_name }}"
+          ssc_source_version: ${{ github.event.repository.default_branch }}
+          # ssc_ci_token: ${{ secrets.FTFY_CI_TOKEN_ENC }}
+          ssc_ci_username: ${{ secrets.FTFY_CI_USERNAME }}
+          ssc_ci_password:  ${{ secrets.FTFY_CI_PASSWORD }}
+          sast_scan: true
+          sast_client_auth_token: ${{ secrets.FTFY_SAST_CLIENT_TOKEN }}
+          sast_build_options: "-q"
+          security_gate_action: warn
+          security_gate_filterset: Critical & High
+            #          summary_filterset: Critical & High
+          gha_token: ${{ github.token }}
+          ssc_source_copy_vulns: true

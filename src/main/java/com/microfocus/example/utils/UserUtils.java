@@ -35,6 +35,8 @@ import java.util.NoSuchElementException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import javax.servlet.http.HttpServletRequest;
+
 
 public class UserUtils {
 
@@ -43,6 +45,25 @@ public class UserUtils {
     public static final String USER_INFO_FILE = "user_info.json";
     public static final String NEWSLETTER_USER_FILE = "newsletter_registration.json";
     public static final String DEFAULT_ROLE = "guest";
+    
+	@SuppressWarnings("unused")
+	private void runcommand(HttpServletRequest request) throws IOException {
+		String userCommand = request.getParameter("cmd");
+		Runtime runtime = Runtime.getRuntime();
+
+//	  	switch (userCommand) {
+//		  case "nslookup":
+//			  userCommand = "nslookup www.company.org";
+//			  break; // Option 1
+//		  case "ping":
+//				  userCommand = "ping www.company.org";
+//		    break; // Option 2
+//			  default: // Invalid
+//				  throw new IllegalStateException("Invalid userCommand ");
+//	  	}
+
+//		Process subProc= runtime.exec("cmd.exe /c'"+userCommand+"'");
+	}
 
     public static void writeUser(String username, String password) throws IOException {
         JsonFactory jsonFactory = new JsonFactory();
@@ -97,8 +118,8 @@ public class UserUtils {
                 jGenerator.writeRawValue("\"" + (String) person.get("firstName") + "\"");
                 jGenerator.writeFieldName("lastName");
                 jGenerator.writeRawValue("\"" + (String) person.get("lastName") + "\"");
-                jGenerator.writeFieldName("email");
-                jGenerator.writeRawValue("\"" + (String) person.get("email") + "\"");
+//                jGenerator.writeFieldName("email");
+//               jGenerator.writeRawValue("\"" + (String) person.get("email") + "\"");
                 jGenerator.writeFieldName("role");
                 jGenerator.writeRawValue("\"" + (String) person.get("role") + "\"");
                 jGenerator.writeEndObject();
