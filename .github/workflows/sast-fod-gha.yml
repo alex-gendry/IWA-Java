@@ -11,10 +11,6 @@ jobs:
     container:
       image: fortifydocker/fortify-ci-tools
     
-    env:
-      APPLICATION: "${{ github.event.repository.name }}"
-      VERSION: "${{ github.ref_name }}"
-
     steps:    
       - name: Check out source code
         uses: actions/checkout@v4  
@@ -26,7 +22,7 @@ jobs:
           FOD_USER: ${{secrets.FOD_USER}}
           FOD_PASSWORD: ${{secrets.FOD_PAT}}
           # EXTRA_FOD_LOGIN_OPTS: --socket-timeout=60s
-          FOD_RELEASE: '"${APPLICATION} [AG]":$VERSION'
+          FOD_RELEASE: '${{ github.event.repository.name }} [AG]:${{ github.ref_name }}'
           EXTRA_PACKAGE_OPTS: -oss
           DO_WAIT: true
           # DO_EXPORT: true
