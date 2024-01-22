@@ -8,6 +8,9 @@ on:
 jobs:
   FOD-SAST:
     runs-on: self-hosted
+    container:
+      image: fortifydocker/fortify-ci-tools
+    
     env:
       APPLICATION: "${{ github.event.repository.name }}"
       VERSION: "${{ github.ref_name }}"
