@@ -22,7 +22,10 @@ on:
 
 jobs:
   Fortify-AST-Scan:
-    runs-on: fortify-ci-tools
+
+    runs-on: self-hosted
+    container:
+      image: fortifydocker/fortify-ci-tools   
     permissions:
       actions: read
       contents: read
