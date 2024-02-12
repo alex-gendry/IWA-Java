@@ -11,7 +11,7 @@
 # assistance with configuration, feel free to create a help ticket in the Fortify on Demand portal.                                            #
 ################################################################################################################################################
 
-name: Fortify AST Scan
+name: Fortify SAST Scan
 
 on:
   workflow_dispatch:
@@ -22,7 +22,7 @@ on:
 
 jobs:
   Fortify-AST-Scan:
-    runs-on: ubuntu-latest
+    runs-on: fortify-ci-tools
     permissions:
       actions: read
       contents: read
@@ -32,45 +32,21 @@ jobs:
     steps:
       # Check out source code
       - name: Check Out Source Code
-        uses: actions/checkout@v3
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
+        uses: actions/checkout@v4
+        
+      - name: Run ScanCentral SAST Scan
+        uses: fortify/github-action@v1
         with:
-          java-version: '11'
-          distribution: 'temurin'
-
-
-      # Set up Fortify ScanCentral Client
-      - name: Download Fortify Clients
-        uses: fortify-ps/github-action/setup@main
-        with:
-          sc-client: latest
-
-      # Retrieve FCLI
-      - name: Install FCLI
-        run: |
-          wget -qO- https://github.com/fortify/fcli/releases/download/v2.1.0/fcli-linux.tgz | tar zxf -
-
-      # Run SAST Scan
-      - name: Fortify SAST Scan
-        uses: agendry-pub/gha-ssc-ast-scan@v1.0.1
+          sast-scan: true
         env:
-          FCLI_DEFAULT_TOKEN_EXPIRE: "1h"
-          FCLI_EXECUTABLE_LOCATION: .
-        with:
-          ssc_base_url: ${{ secrets.FTFY_SSC_BASE_URL}}
-          ssc_app: "${{ github.event.repository.name }}"
-          ssc_version: "${{ github.ref_name }}"
-          ssc_source_version: ${{ github.event.repository.default_branch }}
-          # ssc_ci_token: ${{ secrets.FTFY_CI_TOKEN_ENC }}
-          ssc_ci_username: ${{ secrets.FTFY_CI_USERNAME }}
-          ssc_ci_password:  ${{ secrets.FTFY_CI_PASSWORD }}
-          sast_scan: true
-          sast_client_auth_token: ${{ secrets.FTFY_SAST_CLIENT_TOKEN }}
-          sast_build_options: "-q"
-          security_gate_action: warn
-          security_gate_filterset: Critical & High
-            #          summary_filterset: Critical & High
-          gha_token: ${{ github.token }}
-          ssc_source_copy_vulns: true
+          SSC_URL: ${{secrets.FTFY_SSC_BASE_URL}}
+          SSC_TOKEN: ${{secrets.FTFY_CI_TOKEN_ENC}}
+          SC_SAST_TOKEN: ${{secrets.FTFY_SAST_CLIENT_TOKEN}}
+          # EXTRA_SC_SAST_LOGIN_OPTS: --socket-timeout=60s
+          SSC_APPVERSION: "${{ github.event.repository.name }}:${{ github.ref_name }}"
+          # EXTRA_PACKAGE_OPTS: -bf custom-pom.xml
+          SC_SAST_SENSOR_VERSION: 23.2
+          DO_WAIT: true
+          # DO_EXPORT: true
+          # TOOL_DEFINITIONS: https://ftfy.mycompany.com/tool-definitions/v1/tool-definitions.yaml.zip
+
