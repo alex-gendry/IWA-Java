@@ -47,7 +47,7 @@ jobs:
           SC_SAST_TOKEN: ${{secrets.FTFY_SAST_CLIENT_TOKEN}}
           # EXTRA_SC_SAST_LOGIN_OPTS: --socket-timeout=60s
           SSC_APPVERSION: "${{ github.event.repository.name }}:${{ github.ref_name }}"
-          EXTRA_PACKAGE_OPTS: -bt mvn -bc "-q"
+          EXTRA_PACKAGE_OPTS: -bt mvn -bc "package --quiet"
           SC_SAST_SENSOR_VERSION: 23.2
           DO_WAIT: true
           # DO_EXPORT: true
