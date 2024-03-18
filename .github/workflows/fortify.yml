@@ -38,7 +38,7 @@ jobs:
         uses: actions/checkout@v4
         
       - name: Run ScanCentral SAST Scan
-        uses: fortify/github-action@v1
+        uses: fortify/github-action@v1.2.2
         with:
           sast-scan: true
         env:
@@ -46,7 +46,7 @@ jobs:
           SSC_TOKEN: ${{secrets.FTFY_CI_TOKEN_ENC}}
           SC_SAST_TOKEN: ${{secrets.FTFY_SAST_CLIENT_TOKEN}}
           # EXTRA_SC_SAST_LOGIN_OPTS: --socket-timeout=60s
-          EXTRA_PACKAGE_OPTS: -bt mvn -bc package --quiet
+          # EXTRA_PACKAGE_OPTS: -bt mvn -bc package --quiet
           SC_SAST_SENSOR_VERSION: 23.2
           DO_WAIT: true
           # DO_EXPORT: true
