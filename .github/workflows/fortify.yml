@@ -60,11 +60,11 @@ jobs:
           wget -qO- https://gitlab.ekseed.org/fortify/nexus-iq-integration/-/releases/1.1.4/downloads/binaries/nexus-iq-integration -O nexus-iq-integration.zip 
           unzip nexus-iq-integration.zip -d /usr/bin/
 
-          APP_ID=$(echo $TEST|sed -r 's/\//\\\//g')
+          APP_ID=$(echo $GITHUB_REPOSITORY|sed -r 's/\//\\\//g')
 
           nexus-iq-cli --server-url ${{secrets.IQ_URL}} --authentication ${{secrets.IQ_USERNAME}}:${{secrets.IQ_PASSWORD}} --application-id ${APP_ID} --stage build pom.xml
           fcli ssc session login --url ${{secrets.FTFY_SSC_BASE_URL}} -t ${{secrets.FTFY_CI_TOKEN_ENC}} -k
-          fcli ssc appversion create $GITHUB_REPOSITORY:$GITHUB_REF_NAME:$GITHUB_REF_NAME --auto-required-attrs --skip-if-exists
+          fcli ssc appversion create $GITHUB_REPOSITORY:$GITHUB_REF_NAME --auto-required-attrs --skip-if-exists
           nexus-iq-integration -iqurl ${{secrets.IQ_URL}} -iquser ${{secrets.IQ_USERNAME}} -iqpassword ${{secrets.IQ_PASSWORD}} -iqproject $APP_ID -iqstage build \
             -sscurl ${{secrets.FTFY_SSC_BASE_URL}} -ssctoken ${{secrets.FTFY_CI_TOKEN_ENC}} -sscapp $GITHUB_REPOSITORY -sscversion $GITHUB_REF_NAME
 
