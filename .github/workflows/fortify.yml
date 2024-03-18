@@ -21,17 +21,16 @@ on:
     branches: [ "main" ]
 
 jobs:
-  Fortify-AST-Scan:
+  Fortify-SAST-Scan:
 
     runs-on: self-hosted
     container:
-      image: docker.prod.ekseed.org/nexus-iq-integration:1.1.5
+      image: fortifydocker/fortify-ci-tools
     permissions:
       actions: read
       contents: read
       security-events: write
-       
-
+      
     steps:
       # Check out source code
       - name: Check Out Source Code
@@ -52,7 +51,18 @@ jobs:
           DO_WAIT: true
           # DO_EXPORT: true
           # TOOL_DEFINITIONS: https://ftfy.mycompany.com/tool-definitions/v1/tool-definitions.yaml.zip
+  
+  Fortify-SCA-Scan:
 
+    runs-on: self-hosted
+    container:
+      image: sonatype/nexus-iq-cli
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    
+    steps:
       - name: SCA
         run: |
           wget -qO- https://gitlab.ekseed.org/fortify/nexus-iq-integration/-/releases/1.1.4/downloads/binaries/nexus-iq-integration -O nexus-iq-integration.zip 
