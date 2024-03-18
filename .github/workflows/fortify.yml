@@ -62,7 +62,9 @@ jobs:
 
           APP_ID=$(echo $GITHUB_REPOSITORY|sed -r 's/\//_/g')
 
-          nexus-iq-cli --server-url ${{secrets.IQ_URL}} --authentication ${{secrets.IQ_USERNAME}}:${{secrets.IQ_PASSWORD}} --application-id ${APP_ID} --stage build pom.xml
+          mvn dependency:copy-dependencies
+          
+          nexus-iq-cli --server-url ${{secrets.IQ_URL}} --authentication ${{secrets.IQ_USERNAME}}:${{secrets.IQ_PASSWORD}} --application-id ${APP_ID} --stage build target/dependency pom.xml
           fcli ssc session login --url ${{secrets.FTFY_SSC_BASE_URL}} -t ${{secrets.FTFY_CI_TOKEN_ENC}} -k
           fcli ssc appversion create $GITHUB_REPOSITORY:$GITHUB_REF_NAME --auto-required-attrs --skip-if-exists
           nexus-iq-integration -iqurl ${{secrets.IQ_URL}} -iquser ${{secrets.IQ_USERNAME}} -iqpassword ${{secrets.IQ_PASSWORD}} -iqproject $APP_ID -iqstage build \
