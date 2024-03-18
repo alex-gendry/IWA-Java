@@ -44,9 +44,10 @@ jobs:
         env:
           SSC_URL: ${{secrets.FTFY_SSC_BASE_URL}}
           SSC_TOKEN: ${{secrets.FTFY_CI_TOKEN_ENC}}
+          SSC_APPVERSION: $GITHUB_REPOSITORY:$GITHUB_REF_NAME
           SC_SAST_TOKEN: ${{secrets.FTFY_SAST_CLIENT_TOKEN}}
           # EXTRA_SC_SAST_LOGIN_OPTS: --socket-timeout=60s
-          # EXTRA_PACKAGE_OPTS: -bt mvn -bc package --quiet
+          EXTRA_PACKAGE_OPTS: -bt mvn -bc package --quiet
           SC_SAST_SENSOR_VERSION: 23.2
           DO_WAIT: true
           # DO_EXPORT: true
