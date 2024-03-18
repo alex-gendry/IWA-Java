@@ -36,21 +36,21 @@ jobs:
       - name: Check Out Source Code
         uses: actions/checkout@v4
         
-      - name: Run ScanCentral SAST Scan
-        uses: fortify/github-action@v1.2.2
-        with:
-          sast-scan: true
-        env:
-          SSC_URL: ${{secrets.FTFY_SSC_BASE_URL}}
-          SSC_TOKEN: ${{secrets.FTFY_CI_TOKEN_ENC}}
-          SSC_APPVERSION: ${{github.repository}}:${{github.ref_name}}
-          SC_SAST_TOKEN: ${{secrets.FTFY_SAST_CLIENT_TOKEN}}
-          # EXTRA_SC_SAST_LOGIN_OPTS: --socket-timeout=60s
-          EXTRA_PACKAGE_OPTS: -bt mvn -bc package --quiet
-          SC_SAST_SENSOR_VERSION: 23.2
-          DO_WAIT: true
-          # DO_EXPORT: true
-          # TOOL_DEFINITIONS: https://ftfy.mycompany.com/tool-definitions/v1/tool-definitions.yaml.zip
+      # - name: Run ScanCentral SAST Scan
+      #   uses: fortify/github-action@v1.2.2
+      #   with:
+      #     sast-scan: true
+      #   env:
+      #     SSC_URL: ${{secrets.FTFY_SSC_BASE_URL}}
+      #     SSC_TOKEN: ${{secrets.FTFY_CI_TOKEN_ENC}}
+      #     SSC_APPVERSION: ${{github.repository}}:${{github.ref_name}}
+      #     SC_SAST_TOKEN: ${{secrets.FTFY_SAST_CLIENT_TOKEN}}
+      #     # EXTRA_SC_SAST_LOGIN_OPTS: --socket-timeout=60s
+      #     EXTRA_PACKAGE_OPTS: -bt mvn -bc package --quiet
+      #     SC_SAST_SENSOR_VERSION: 23.2
+      #     DO_WAIT: true
+      #     # DO_EXPORT: true
+      #     # TOOL_DEFINITIONS: https://ftfy.mycompany.com/tool-definitions/v1/tool-definitions.yaml.zip
     
       - name: SCA
         run: |
