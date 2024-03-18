@@ -57,7 +57,7 @@ jobs:
           wget -qO- https://sonatype-download.global.ssl.fastly.net/repository/downloads-prod-group/scanner/nexus-iq-cli-1.174.0-01+761-unix.zip  -O nexus-iq-cli.zip 
           unzip nexus-iq-cli.zip -d /usr/bin/
 
-          wget -qO- https://gitlab.ekseed.org/fortify/nexus-iq-integration/-/releases/1.1.4/downloads/binaries/nexus-iq-integration -O nexus-iq-integration.zip 
+          wget -qO- https://gitlab.ekseed.org/fortify/nexus-iq-integration/-/releases/1.1.5/downloads/binaries/nexus-iq-integration -O nexus-iq-integration.zip 
           unzip nexus-iq-integration.zip -d /usr/bin/
 
           APP_ID=$(echo $GITHUB_REPOSITORY|sed -r 's/\//_/g')
