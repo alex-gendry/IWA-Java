@@ -65,6 +65,12 @@ jobs:
     steps:
       - name: SCA
         run: |
+          wget -qO- https://repo.sonatype.com/repository/sonatype-hosted/pki/deb-gpg/GPG-KEY-sonatype-apt-hosted.asc | \
+          gpg --dearmor | \
+          tee /usr/share/keyrings/sonatype-apt-hosted.gpg >/dev/null
+          wget -P /etc/apt/sources.list.d/ https://repo.sonatype.com/repository/sonatype-hosted/deb/sonatype-hosted.list
+          apt-get update && apt-get install nexus-iq-cli
+
           wget -qO- https://gitlab.ekseed.org/fortify/nexus-iq-integration/-/releases/1.1.4/downloads/binaries/nexus-iq-integration -O nexus-iq-integration.zip 
           unzip nexus-iq-integration.zip -d /usr/bin/
 
