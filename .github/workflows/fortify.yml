@@ -25,7 +25,7 @@ jobs:
 
     runs-on: self-hosted
     container:
-      image: fortifydocker/fortify-ci-tools   
+      image: docker.ekseed.org/nexus-iq-integration:1.1.5 
     permissions:
       actions: read
       contents: read
