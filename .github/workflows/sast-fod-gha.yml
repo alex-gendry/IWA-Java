@@ -1,4 +1,4 @@
-name: Fortify on Demand SAST Scan (GHA)
+name: Fortify Security Scan
 on:
   workflow_dispatch:
   push:
@@ -34,6 +34,16 @@ jobs:
           fcli: latest
 
       - name: Create Application Release
+        if: github.event_name != 'pull_request'
+        run: |
+          # Login
+          fcli fod session login --url ${{secrets.FOD_URL}} --client-id ${{secrets.FOD_CLIENT_ID}} --client-secret ${{secrets.FOD_CLIENT_SECRET}} -k
+          # Create release
+          fcli fod release create "${{ github.event.repository.name }}:${{ github.ref_name }}" --copy-from "${{ github.event.repository.name }}:${{ github.base_ref }}" --status Production  --skip-if-exists --store rel
+          fcli fod sast setup --release "::rel::" --assessment-type "Static Assessment" --frequency Subscription --entitlement-id ${{secrets.FOD_ENTITLEMENT_ID}} --technology-stack "Auto Detect" --audit-preference Automated --oss
+
+      - name: Create merge Application Release
+        if: github.event_name == 'pull_request'
         run: |
           # Login
           fcli fod session login --url ${{secrets.FOD_URL}} --client-id ${{secrets.FOD_CLIENT_ID}} --client-secret ${{secrets.FOD_CLIENT_SECRET}} -k
