@@ -38,6 +38,7 @@ jobs:
         run: |
           # Login
           fcli fod session login --url ${{secrets.FOD_URL}} --client-id ${{secrets.FOD_CLIENT_ID}} --client-secret ${{secrets.FOD_CLIENT_SECRET}} -k
+          echo "${{ github.ref_name }}"
           # Create release
           fcli fod release create "${{ github.event.repository.name }}:${{ github.ref_name }}" --copy-from "${{ github.event.repository.name }}:${{ github.base_ref }}" --status Production  --skip-if-exists --store rel
           fcli fod sast setup --release "::rel::" --assessment-type "Static Assessment" --frequency Subscription --entitlement-id ${{secrets.FOD_ENTITLEMENT_ID}} --technology-stack "Auto Detect" --audit-preference Automated --oss
