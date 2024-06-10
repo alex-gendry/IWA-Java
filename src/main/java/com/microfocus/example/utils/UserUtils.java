@@ -45,11 +45,11 @@ public class UserUtils {
     public static final String USER_INFO_FILE = "user_info.json";
     public static final String NEWSLETTER_USER_FILE = "newsletter_registration.json";
     public static final String DEFAULT_ROLE = "guest";
-    
-	@SuppressWarnings("unused")
-	private void runcommand(HttpServletRequest request) throws IOException {
-		String userCommand = request.getParameter("cmd");
-		Runtime runtime = Runtime.getRuntime();
+
+    @SuppressWarnings("unused")
+    private void runcommand(HttpServletRequest request) throws IOException {
+        String userCommand = request.getParameter("cmd");
+        Runtime runtime = Runtime.getRuntime();
 
 //	  	switch (userCommand) {
 //		  case "nslookup":
@@ -63,7 +63,7 @@ public class UserUtils {
 //	  	}
 
 //		Process subProc= runtime.exec("cmd.exe /c'"+userCommand+"'");
-	}
+    }
 
     public static void writeUser(String username, String password) throws IOException {
         JsonFactory jsonFactory = new JsonFactory();
@@ -78,13 +78,13 @@ public class UserUtils {
         jGenerator.writeStartObject();
 
         jGenerator.writeFieldName("username");
-        jGenerator.writeString("\"" + username + "\"");
+        jGenerator.writeRawValue("\"" + username + "\"");
 
         jGenerator.writeFieldName("password");
-        jGenerator.writeString("\"" + password + "\"");
+        jGenerator.writeRawValue("\"" + password + "\"");
 
         jGenerator.writeFieldName("role");
-        jGenerator.writeString("\"default\"");
+        jGenerator.writeRawValue("\"default\"");
 
         jGenerator.writeEndObject();
 
@@ -115,13 +115,13 @@ public class UserUtils {
                 jGenerator.writeStartObject();
                 JSONObject person = (JSONObject) jsonObject;
                 jGenerator.writeFieldName("firstName");
-                jGenerator.writeString("\"" + (String) person.get("firstName") + "\"");
+                jGenerator.writeRawValue("\"" + (String) person.get("firstName") + "\"");
                 jGenerator.writeFieldName("lastName");
-                jGenerator.writeString("\"" + (String) person.get("lastName") + "\"");
+                jGenerator.writeRawValue("\"" + (String) person.get("lastName") + "\"");
 //                jGenerator.writeFieldName("email");
-//               jGenerator.writeString("\"" + (String) person.get("email") + "\"");
+//               jGenerator.writeRawValue("\"" + (String) person.get("email") + "\"");
                 jGenerator.writeFieldName("role");
-                jGenerator.writeString("\"" + (String) person.get("role") + "\"");
+                jGenerator.writeRawValue("\"" + (String) person.get("role") + "\"");
                 jGenerator.writeEndObject();
 
             }
@@ -129,13 +129,13 @@ public class UserUtils {
             // write new user
             jGenerator.writeStartObject();
             jGenerator.writeFieldName("firstName");
-            jGenerator.writeString("\"" + firstName + "\"");
+            jGenerator.writeRawValue("\"" + firstName + "\"");
             jGenerator.writeFieldName("lastName");
-            jGenerator.writeString("\"" + lastName + "\"");
+            jGenerator.writeRawValue("\"" + lastName + "\"");
             jGenerator.writeFieldName("email");
-            jGenerator.writeString("\"" + email + "\"");
+            jGenerator.writeRawValue("\"" + email + "\"");
             jGenerator.writeFieldName("role");
-            jGenerator.writeString("\"" + DEFAULT_ROLE + "\"");
+            jGenerator.writeRawValue("\"" + DEFAULT_ROLE + "\"");
             jGenerator.writeEndObject();
 
             jGenerator.writeEndArray();
@@ -149,7 +149,7 @@ public class UserUtils {
             throws IOException, SecurityException, IllegalStateException, NoSuchElementException {
         ZipFile zf = new ZipFile(fName);
         @SuppressWarnings("unchecked")
-		Enumeration<ZipEntry> e = (Enumeration<ZipEntry>) zf.entries();
+        Enumeration<ZipEntry> e = (Enumeration<ZipEntry>) zf.entries();
         while (e.hasMoreElements()) {
             log.info(e.nextElement().toString());
         }
