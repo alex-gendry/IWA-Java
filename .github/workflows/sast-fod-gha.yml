@@ -42,6 +42,7 @@ jobs:
           # Create release
           fcli fod release create "${{ github.event.repository.name }}:${{ github.ref_name }}" --copy-from "${{ github.event.repository.name }}:${{ github.base_ref }}" --status Production  --skip-if-exists --store rel
           fcli fod sast setup --release "::rel::" --assessment-type "Static Assessment" --frequency Subscription --entitlement-id ${{secrets.FOD_ENTITLEMENT_ID}} --technology-stack "Auto Detect" --audit-preference Automated --oss
+
       - name: Create Application Release
         if: github.event_name != 'pull_request'
         run: |
@@ -50,6 +51,7 @@ jobs:
           # Create release
           fcli fod release create "${{ github.event.repository.name }}:${{ github.ref_name }}" --status Production  --skip-if-exists --store rel
           fcli fod sast setup --release "::rel::" --assessment-type "Static Assessment" --frequency Subscription --entitlement-id ${{secrets.FOD_ENTITLEMENT_ID}} --technology-stack "Auto Detect" --audit-preference Automated --oss
+
       - name: Run FoD SAST Scan
         uses: fortify/github-action/fod-sast-scan@v1.2.2
         env:
@@ -66,10 +68,11 @@ jobs:
         run: |
           fcli fod session login --url ${{secrets.FOD_URL}} --client-id ${{secrets.FOD_CLIENT_ID}} --client-secret ${{secrets.FOD_CLIENT_SECRET}} -k
           fcli fod action run release-summary --release "${{ github.event.repository.name }}:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+
       - name: Fortify PR summary
         if: github.event_name == 'pull_request'
         run: |
           fcli fod session login --url ${{secrets.FOD_URL}} --client-id ${{secrets.FOD_CLIENT_ID}} --client-secret ${{secrets.FOD_CLIENT_SECRET}} -k
-          fcli fod action run github-pr-comment --rel 143507
+          fcli fod action run github-pr-comment --rel "${{ github.event.repository.name }}:${{ github.ref_name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
