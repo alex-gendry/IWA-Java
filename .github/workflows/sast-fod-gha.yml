@@ -70,6 +70,6 @@ jobs:
         if: github.event_name == 'pull_request'
         run: |
           fcli fod session login --url ${{secrets.FOD_URL}} --client-id ${{secrets.FOD_CLIENT_ID}} --client-secret ${{secrets.FOD_CLIENT_SECRET}} -k
-          fcli fod action run github-pr-comment --rel 143507
+          fcli fod action run github-pr-comment --rel "${{ github.event.repository.name }}:${{ github.ref_name }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
