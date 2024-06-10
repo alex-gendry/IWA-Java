@@ -1,0 +1,27 @@
+name: Fortify Security Scan
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  FoD-Cleanup:
+    runs-on: self-hosted
+    container:
+      image: fortifydocker/fortify-ci-tools
+    permissions: write-all
+    env:
+      APPLICATION: "${{ github.event.repository.name }}"
+      VERSION: "${{ github.ref_name }}"
+
+      # Requires GitHub Advanced Security
+      PUBLISH_SECURITY_ALERTS: false
+
+    steps:
+
+      - name: Delete merge Application Release
+        if: github.event_name == 'pull_request' && github.event.action == 'closed'
+        run: |
+          # Login
+          fcli fod session login --url ${{secrets.FOD_URL}} --client-id ${{secrets.FOD_CLIENT_ID}} --client-secret ${{secrets.FOD_CLIENT_SECRET}} -k
+          # Create release
+          fcli fod release delete "${{ github.event.repository.name }}:${{ github.ref_name }}"
