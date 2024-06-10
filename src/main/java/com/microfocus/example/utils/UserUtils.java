@@ -78,13 +78,13 @@ public class UserUtils {
         jGenerator.writeStartObject();
 
         jGenerator.writeFieldName("username");
-        jGenerator.writeRawValue("\"" + username + "\"");
+        jGenerator.writeString("\"" + username + "\"");
 
         jGenerator.writeFieldName("password");
-        jGenerator.writeRawValue("\"" + password + "\"");
+        jGenerator.writeString("\"" + password + "\"");
 
         jGenerator.writeFieldName("role");
-        jGenerator.writeRawValue("\"default\"");
+        jGenerator.writeString("\"default\"");
 
         jGenerator.writeEndObject();
 
@@ -115,13 +115,13 @@ public class UserUtils {
                 jGenerator.writeStartObject();
                 JSONObject person = (JSONObject) jsonObject;
                 jGenerator.writeFieldName("firstName");
-                jGenerator.writeRawValue("\"" + (String) person.get("firstName") + "\"");
+                jGenerator.writeString("\"" + (String) person.get("firstName") + "\"");
                 jGenerator.writeFieldName("lastName");
-                jGenerator.writeRawValue("\"" + (String) person.get("lastName") + "\"");
+                jGenerator.writeString("\"" + (String) person.get("lastName") + "\"");
 //                jGenerator.writeFieldName("email");
-//               jGenerator.writeRawValue("\"" + (String) person.get("email") + "\"");
+//               jGenerator.writeString("\"" + (String) person.get("email") + "\"");
                 jGenerator.writeFieldName("role");
-                jGenerator.writeRawValue("\"" + (String) person.get("role") + "\"");
+                jGenerator.writeString("\"" + (String) person.get("role") + "\"");
                 jGenerator.writeEndObject();
 
             }
@@ -129,13 +129,13 @@ public class UserUtils {
             // write new user
             jGenerator.writeStartObject();
             jGenerator.writeFieldName("firstName");
-            jGenerator.writeRawValue("\"" + firstName + "\"");
+            jGenerator.writeString("\"" + firstName + "\"");
             jGenerator.writeFieldName("lastName");
-            jGenerator.writeRawValue("\"" + lastName + "\"");
+            jGenerator.writeString("\"" + lastName + "\"");
             jGenerator.writeFieldName("email");
-            jGenerator.writeRawValue("\"" + email + "\"");
+            jGenerator.writeString("\"" + email + "\"");
             jGenerator.writeFieldName("role");
-            jGenerator.writeRawValue("\"" + DEFAULT_ROLE + "\"");
+            jGenerator.writeString("\"" + DEFAULT_ROLE + "\"");
             jGenerator.writeEndObject();
 
             jGenerator.writeEndArray();
