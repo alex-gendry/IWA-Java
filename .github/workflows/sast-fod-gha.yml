@@ -68,6 +68,11 @@ jobs:
           fcli fod session login --url ${{secrets.FOD_URL}} --client-id ${{secrets.FOD_CLIENT_ID}} --client-secret ${{secrets.FOD_CLIENT_SECRET}} -k
           fcli fod action run release-summary --release "${{ github.event.repository.name }}:${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
 
+      - name: Fortify Security Gate
+        run: |
+          fcli fod session login --url ${{secrets.FOD_URL}} --client-id ${{secrets.FOD_CLIENT_ID}} --client-secret ${{secrets.FOD_CLIENT_SECRET}} -k
+          fcli fod action run check-policy --rel "${{ github.event.repository.name }}:${{ github.ref_name }}" 
+
       - name: Fortify PR summary
         if: github.event_name == 'pull_request'
         run: |
