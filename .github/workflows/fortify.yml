@@ -1,0 +1,54 @@
+################################################################################################################################################
+# Fortify lets you build secure software fast with an appsec platform that automates testing throughout the DevSecOps pipeline. Fortify static,#
+# dynamic, interactive, and runtime security testing is available on premises or as a service. To learn more about Fortify, start a free trial #
+# or contact our sales team, visit microfocus.com/appsecurity.                                                                                 #
+#                                                                                                                                              #
+# Use this workflow template as a basis for integrating Fortify on Demand Static Application Security Testing(SAST) into your GitHub workflows.#
+# This template demonstrates the steps to prepare the code+dependencies, initiate a scan, download results once complete and import into       #
+# GitHub Security Code Scanning Alerts. Existing customers should review inputs and environment variables below to configure scanning against  #
+# an existing application in your Fortify on Demand tenant. Additional information is available in the comments throughout the workflow, the   #
+# documentation for the Fortify actions used, and the Fortify on Demand / ScanCentral Client product documentation. If you need additional     #
+# assistance with configuration, feel free to create a help ticket in the Fortify on Demand portal.                                            #
+################################################################################################################################################
+
+name: Fortify OSS Scan
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+
+jobs:
+  Fortify-OSS-Scan:
+
+    runs-on: self-hosted
+    container:
+      image: fortifydocker/fortify-ci-tools
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+      
+    steps:
+      # Check out source code
+      - name: Check Out Source Code
+        uses: actions/checkout@v4
+        
+
+      - name: OSS
+        run: |
+          apt update && apt install -y zip
+          curl -L https://github.com/debricked/cli/releases/latest/download/cli_linux_x86_64.tar.gz | tar -xz -C /usr/bin/
+          fcli fod session login --url https://ams.fortify.com --client-id 17c08c75-bd7d-4c2e-b6ee-fd35ad204257 --client-secret clNPdkF4RnkmcFxGakVOPzhNNjBUNjhOb3FpVHls0 -k
+          # Create release
+          fcli fod release create "Fortify-IWA (Java)":"GitHub" --status Production  --skip-if-exists --store rel
+          fcli fod sast setup --release "::rel::" --assessment-type "Static Assessment" --frequency Subscription --entitlement-id 13448 --technology-stack "Auto Detect" --audit-preference Automated --oss
+    
+          # Resolve dependencies and run scan
+          debricked resolve
+          zip package.zip maven.debricked.lock
+          fcli fod oss start --release "::rel::" -f package.zip --store scan
+          fcli fod oss wait-for "::scan::scanId"
+
+
+        
