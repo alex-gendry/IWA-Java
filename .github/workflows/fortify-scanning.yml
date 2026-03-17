@@ -31,13 +31,12 @@ jobs:
       - name: Check out source code
         uses: actions/checkout@v4
       - name: Run ScanCentral SAST Scan
-        uses: fortify/github-action/sc-sast-scan@v2
-        with:
-          sast-scan: true
+        uses: fortify/github-action@v3
         env:
           DO_SETUP: true
-          PACKAGE_EXTRA_OPTS: -q
-          EXTRA_SC_SAST_SCAN_OPTS: --no-replace
+          DO_SAST_SCAN: true
           DO_WAIT: true
           DO_JOB_SUMMARY: true
           DO_PR_COMMENT: true
+          PACKAGE_EXTRA_OPTS: -q
+          SC_SAST_SCAN_EXTRA_OPTS: --no-replace
