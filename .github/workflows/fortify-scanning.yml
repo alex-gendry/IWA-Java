@@ -1,0 +1,43 @@
+name: Fortify Security Scan
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - github/main
+  pull_request:
+
+env:
+
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GITHUB_SHA: ${{ secrets.GITHUB_SHA }}
+  SHA: "${{ github.run_id }}"
+  SSC_URL: https://fortify.prod.ekseed.org
+  SSC_TOKEN: ${{secrets.FTFY_CI_TOKEN_DEC}}
+  SC_SAST_TOKEN: ${{secrets.FTFY_SAST_CLIENT_TOKEN}}
+  SC_SAST_SENSOR_VERSION: 26.1
+
+jobs:
+  Fortify-SAST:
+    # Use the appropriate runner for building your source code
+    runs-on: ubuntu-latest
+    permissions:
+      # required for all workflows
+      security-events: write
+      # only required for workflows in private repositories
+      actions: read
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Check out source code
+        uses: actions/checkout@v4
+      - name: Run ScanCentral SAST Scan
+        uses: fortify/github-action/sc-sast-scan@v2
+        with:
+          sast-scan: true
+        env:
+          DO_SETUP: true
+          PACKAGE_EXTRA_OPTS: -q
+          EXTRA_SC_SAST_SCAN_OPTS: --no-replace
+          DO_WAIT: true
+          DO_JOB_SUMMARY: true
+          DO_PR_COMMENT: true
